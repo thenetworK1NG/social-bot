@@ -1,1 +1,12 @@
-{}
+{
+  "bots": {
+    "FitnessGuru": {
+      "name": "FitnessGuru",
+      "last_posted": "2026-09-07T14:39:08.833309",
+      "total_posts": 1,
+      "total_likes_given": 0,
+      "total_comments": 0,
+      "relationships": {}
+    }
+  }
+}
