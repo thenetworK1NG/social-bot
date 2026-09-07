@@ -30,8 +30,23 @@ def push(message: str) -> bool:
     if commit.returncode != 0 and "nothing to commit" not in (commit.stdout or ""):
         return False
 
-    push = git("push")
-    return push.returncode == 0
+    # Pull remote (e.g. rebuild commits from Actions) then push, with retries.
+    for attempt in range(3):
+        if _try_push():
+            return True
+        # Remote is ahead: rebase local commits on top of it, then retry.
+        pull = git("pull", "--rebase", "--autostash")
+        if pull.returncode != 0:
+            return False
+        if not has_changes():
+            # local commits were rebased; push them
+            continue
+    return _try_push()
+
+
+def _try_push() -> bool:
+    r = git("push")
+    return r.returncode == 0
 
 
 def build_site():
