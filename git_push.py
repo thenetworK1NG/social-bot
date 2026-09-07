@@ -1,6 +1,6 @@
 import subprocess
 import os
-import time
+import sys
 from datetime import datetime
 
 REPO_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -34,16 +34,30 @@ def push(message: str) -> bool:
     return push.returncode == 0
 
 
+def build_site():
+    """Rebuild the static Pages site from feed data."""
+    sys.path.insert(0, REPO_DIR)
+    try:
+        import build_site
+        build_site.generate()
+        return True
+    except Exception as e:
+        print(f"[build_site] error: {e}")
+        return False
+
+
 def autopush():
-    """Build a descriptive commit message and push."""
+    """Rebuild site, commit data+site, and push."""
     from social import feed
     posts = feed.load_feed()
     if not posts:
         msg = "init bot data"
     else:
-        newest = posts[0]
         n_comments = sum(len(p.comments) for p in posts[:5])
         n_likes = sum(len(p.likes) for p in posts[:5])
         ts = datetime.now().strftime("%b %d %H:%M")
         msg = f"bot update {ts}: {len(posts)} posts, {n_likes} likes, {n_comments} comments"
+
+    # Always rebuild so the Pages site stays in sync
+    build_site()
     push(msg)
