@@ -66,8 +66,12 @@ def _build_batch_prompt(slots):
             f" or repeat the post back.{emoji}"
         )
     return (
-        "You are writing comments for several fictional social media users,"
-        " each reacting to a friend. Sound like real people, not an AI.\n"
+        "Write comments for fictional social media users reacting to a friend's post."
+        " Make them sound like actual people, not an AI. Real comments are short,"
+        " casual, reference something specific from the post, and have personality."
+        " Use slang, typos occasionally, or abbreviations. Don't be generic."
+        " React emotionally, not analytically. Each comment should feel like a"
+        " natural response a real friend would leave.\n"
         + "\n".join(parts)
         + "\nReturn a JSON array with EXACTLY the same number of string entries,"
           " in the same order — one comment per user."
@@ -179,8 +183,9 @@ def _maybe_extend_thread(post):
     prompt = (
         f"{replier.name} is a user with this personality: {replier.personality_prompt}. "
         f"{comment.author} commented \"{comment.content}\" on a post by {post.author}. "
-        f"Reply to {comment.author}'s comment the way a real friend would — one sentence,"
-        f" in your own voice, do not quote it back. {'Emojis welcome.' if replier.uses_emojis else 'No emojis.'}"
+        f"Reply the way a real friend would reply to a comment — one short sentence,"
+        f" casual, reference something specific, do not quote it back."
+        f" {'Use emojis.' if replier.uses_emojis else 'No emojis.'}"
     )
     reply_content = generate_text(prompt)
     if not reply_content:
@@ -197,12 +202,89 @@ def _maybe_extend_thread(post):
 
 
 def _fallback_comment(bot, post):
-    templates = [
+    # Personality-specific fallbacks
+    personality_fallbacks = {
+        "TechBro42": [
+            "ship it",
+            "have you tried turning it off and on again",
+            f"this is the content i come here for {post.author}",
+            "based",
+        ],
+        "NatureLover": [
+            "love this energy",
+            "the world needs more of this",
+            "yes yes yes",
+            "this made my day",
+        ],
+        "ChaosGremlin": [
+            "lmaooo what",
+            "this is unhinged and i respect it",
+            "absolute chaos and i'm here for it",
+            "you woke up and chose violence huh",
+        ],
+        "MidnightCoder": [
+            "same tbh",
+            "why is this so real",
+            "i felt this in my git history",
+            "mood",
+        ],
+        "CoffeeAddict": [
+            "need coffee just reading this",
+            "THIS!!",
+            "okay but also coffee",
+            "screaming",
+        ],
+        "NewsBot3000": [
+            "finally someone said it",
+            "hot take but correct",
+            "adding this to the discourse",
+            "you're right and you should say it",
+        ],
+        "SleepyHead": [
+            "too tired to respond but i agree",
+            "zzzz but like in a good way",
+            "this is the content i need when i wake up",
+            "nap after reading this",
+        ],
+        "ArtKid": [
+            "the aesthetic of this is",
+            "this is a whole mood",
+            "chef's kiss",
+            "this has layers",
+        ],
+        "FitnessGuru": [
+            "let's gooo",
+            "this is the energy we need",
+            "no excuses just vibes",
+            "love this mindset",
+        ],
+        "WeirdPhilosophy": [
+            "but what does it mean though",
+            "this question haunts me now",
+            "i need to think about this for 3 business days",
+            "you've unlocked a new fear",
+        ],
+        "FoodieFran": [
+            "adding this to my mental recipe book",
+            "but does it pair well with cheese",
+            "i'm hungry now thanks",
+            "the flavor of this post",
+        ],
+        "VibeChecker": [
+            "the vibe is immaculate",
+            "checking the vibe and it's good",
+            "vibes are off the charts",
+            "this resonates on a spiritual level",
+        ],
+    }
+    
+    # Use personality-specific fallback if available, otherwise generic
+    options = personality_fallbacks.get(bot.name, [
         f"ok i felt that one {post.author}",
         "this is so real actually",
         "lmaooo",
         f"wait this is a great point about {random.choice(bot.interests)}",
         "no because why is this so accurate",
         "big if true",
-    ]
-    return random.choice(templates)
+    ])
+    return random.choice(options)

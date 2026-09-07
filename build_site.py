@@ -367,6 +367,7 @@ def render_notifs(feed):
     for p in feed:
         pid = p.get("id", "") or ""
         author = p.get("author", "?")
+        items.append((p.get("timestamp", ""), "post", author, author, p.get("content", ""), f"#post-{pid}"))
         for l in p.get("likes", []):
             items.append((p.get("timestamp", ""), "like", l, author, "", f"#post-{pid}"))
         for c in p.get("comments", []):
@@ -378,11 +379,13 @@ def render_notifs(feed):
     items.sort(key=lambda x: x[0], reverse=True)
     if not items:
         return '<div class="empty sm">no activity yet…</div>'
-    icons = {"like": "❤", "com": "💬", "rep": "↩"}
-    colors = {"like": "background:#1d9bf033", "com": "background:#2ecc7133", "rep": "background:#9b59b633"}
+    icons = {"post": "📝", "like": "❤", "com": "💬", "rep": "↩"}
+    colors = {"post": "background:#1d9bf033", "like": "background:#1d9bf033", "com": "background:#2ecc7133", "rep": "background:#9b59b633"}
     rows = []
     for ts, kind, who, target, text, anchor in items[:14]:
-        if kind == "like":
+        if kind == "post":
+            line = f'<b>{_esc(who)}</b> posted'
+        elif kind == "like":
             line = f'<b>{_esc(who)}</b> liked {target}\'s post'
         elif kind == "com":
             line = f'<b>{_esc(who)}</b> commented on {target}\'s post'
@@ -974,6 +977,7 @@ function renderNotifs(posts){
   var items = [];
   posts.forEach(function(p){
     var pid = p.id || "";
+    items.push({ ts: p.timestamp, kind: "post", who: p.author, target: p.author, text: p.content, anchor: "#post-" + pid });
     (p.likes || []).forEach(function(l){
       items.push({ ts: p.timestamp, kind: "like", who: l, target: p.author, text: "", anchor: "#post-" + pid });
     });
@@ -988,10 +992,11 @@ function renderNotifs(posts){
   });
   items.sort(function(a, b){ return (b.ts || "") > (a.ts || "") ? 1 : -1; });
   if (!items.length) return '<div class="empty sm">no activity yet…</div>';
-  var icons = { like: "❤", com: "💬", rep: "↩" };
-  var colors = { like: "background:#1d9bf033", com: "background:#2ecc7133", rep: "background:#9b59b633" };
+  var icons = { post: "📝", like: "❤", com: "💬", rep: "↩" };
+  var colors = { post: "background:#1d9bf033", like: "background:#1d9bf033", com: "background:#2ecc7133", rep: "background:#9b59b633" };
   return items.slice(0, 14).map(function(it){
-    var line = it.kind === "like" ? "<b>" + esc(it.who) + "</b> liked " + esc(it.target) + "'s post"
+    var line = it.kind === "post" ? "<b>" + esc(it.who) + "</b> posted"
+      : it.kind === "like" ? "<b>" + esc(it.who) + "</b> liked " + esc(it.target) + "'s post"
       : it.kind === "com" ? "<b>" + esc(it.who) + "</b> commented on " + esc(it.target) + "'s post"
       : "<b>" + esc(it.who) + "</b> replied in " + esc(it.target) + "'s thread";
     var snip = esc(cleanContent(it.text)).slice(0, 90);
