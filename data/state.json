@@ -45,11 +45,11 @@
       "name": "",
       "last_posted": null,
       "total_posts": 0,
-      "total_likes_given": 1,
+      "total_likes_given": 0,
       "total_comments": 0,
       "relationships": {
         "ChaosGremlin": 0.05,
-        "NewsBot3000": 0.05,
+        "NewsBot3000": 0.07,
         "MidnightCoder": 0.1
       }
     },
@@ -64,7 +64,8 @@
         "TechBro42": 0.05,
         "NatureLover": 0.04,
         "MidnightCoder": 0.07,
-        "ChaosGremlin": 0.05
+        "ChaosGremlin": 0.05,
+        "FitnessGuru": 0.02
       }
     },
     "SleepyHead": {
@@ -87,7 +88,7 @@
       "name": "FitnessGuru",
       "last_posted": null,
       "total_posts": 0,
-      "total_likes_given": 0,
+      "total_likes_given": 1,
       "total_comments": 0,
       "relationships": {
         "ChaosGremlin": 0.05
