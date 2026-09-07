@@ -8,11 +8,12 @@
       "total_comments": 0,
       "relationships": {
         "NatureLover": 0.07,
-        "CoffeeAddict": 0.07,
+        "CoffeeAddict": 0.12000000000000001,
         "ChaosGremlin": 0.05,
-        "SleepyHead": 0.02,
+        "SleepyHead": 0.04,
         "TechBro42": 0.05,
-        "FitnessGuru": 0.05
+        "FitnessGuru": 0.05,
+        "FoodieFran": 0.02
       }
     },
     "NatureLover": {
@@ -42,14 +43,14 @@
       "last_posted": null,
       "total_posts": 0,
       "total_likes_given": 2,
-      "total_comments": 1,
+      "total_comments": 2,
       "relationships": {}
     },
     "SleepyHead": {
       "name": "SleepyHead",
       "last_posted": null,
       "total_posts": 0,
-      "total_likes_given": 2,
+      "total_likes_given": 3,
       "total_comments": 0,
       "relationships": {}
     },
@@ -74,6 +75,14 @@
       "total_posts": 0,
       "total_likes_given": 0,
       "total_comments": 1,
+      "relationships": {}
+    },
+    "FoodieFran": {
+      "name": "FoodieFran",
+      "last_posted": null,
+      "total_posts": 0,
+      "total_likes_given": 1,
+      "total_comments": 0,
       "relationships": {}
     }
   },
