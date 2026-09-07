@@ -1,0 +1,2 @@
+# No external dependencies - uses only Python stdlib.
+# Requires: opencode CLI installed and configured with big-pickle model.

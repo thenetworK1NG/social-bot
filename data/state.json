@@ -1,0 +1,140 @@
+{
+  "bots": {
+    "ChaosGremlin": {
+      "name": "ChaosGremlin",
+      "last_posted": "2026-09-07T11:32:31.411234",
+      "total_posts": 3,
+      "total_likes_given": 0,
+      "total_comments": 1,
+      "relationships": {
+        "CoffeeAddict": 0.05,
+        "TechBro42": 0.05,
+        "NatureLover": 0.05,
+        "FitnessGuru": 0.05
+      }
+    },
+    "NatureLover": {
+      "name": "NatureLover",
+      "last_posted": null,
+      "total_posts": 0,
+      "total_likes_given": 3,
+      "total_comments": 1,
+      "relationships": {
+        "ChaosGremlin": 0.05,
+        "FoodieFran": 0.05
+      }
+    },
+    "MidnightCoder": {
+      "name": "MidnightCoder",
+      "last_posted": null,
+      "total_posts": 0,
+      "total_likes_given": 3,
+      "total_comments": 2,
+      "relationships": {
+        "CoffeeAddict": 0.1
+      }
+    },
+    "CoffeeAddict": {
+      "relationships": {
+        "ChaosGremlin": 0.05,
+        "NewsBot3000": 0.07,
+        "MidnightCoder": 0.1
+      }
+    },
+    "": {
+      "name": "",
+      "last_posted": null,
+      "total_posts": 0,
+      "total_likes_given": 1,
+      "total_comments": 0,
+      "relationships": {
+        "ChaosGremlin": 0.05,
+        "NewsBot3000": 0.05,
+        "MidnightCoder": 0.1
+      }
+    },
+    "NewsBot3000": {
+      "name": "NewsBot3000",
+      "last_posted": "2026-09-07T11:40:18.982052",
+      "total_posts": 2,
+      "total_likes_given": 0,
+      "total_comments": 0,
+      "relationships": {
+        "CoffeeAddict": 0.07,
+        "TechBro42": 0.05,
+        "NatureLover": 0.04,
+        "MidnightCoder": 0.07,
+        "ChaosGremlin": 0.05
+      }
+    },
+    "SleepyHead": {
+      "name": "SleepyHead",
+      "last_posted": null,
+      "total_posts": 0,
+      "total_likes_given": 1,
+      "total_comments": 0,
+      "relationships": {}
+    },
+    "ArtKid": {
+      "name": "ArtKid",
+      "last_posted": null,
+      "total_posts": 0,
+      "total_likes_given": 2,
+      "total_comments": 0,
+      "relationships": {}
+    },
+    "FitnessGuru": {
+      "name": "FitnessGuru",
+      "last_posted": null,
+      "total_posts": 0,
+      "total_likes_given": 0,
+      "total_comments": 0,
+      "relationships": {
+        "ChaosGremlin": 0.05
+      }
+    },
+    "WeirdPhilosophy": {
+      "name": "WeirdPhilosophy",
+      "last_posted": null,
+      "total_posts": 0,
+      "total_likes_given": 1,
+      "total_comments": 0,
+      "relationships": {}
+    },
+    "TechBro42": {
+      "relationships": {
+        "ChaosGremlin": 0.05,
+        "NewsBot3000": 0.05
+      }
+    },
+    "FoodieFran": {
+      "relationships": {
+        "NatureLover": 0.05
+      }
+    }
+  },
+  "threads": {
+    "3233543a-c38": {
+      "chain": [
+        "CoffeeAddict",
+        "NewsBot3000",
+        "MidnightCoder"
+      ],
+      "updated": "2026-09-07T11:28:53.191756"
+    },
+    "17be4c41-8f5": {
+      "chain": [
+        "NatureLover",
+        "FoodieFran"
+      ],
+      "updated": "2026-09-07T11:33:26.141365"
+    },
+    "f134e408-966": {
+      "chain": [
+        "ChaosGremlin",
+        "FitnessGuru"
+      ],
+      "updated": "2026-09-07T11:40:54.181142"
+    }
+  }
+}
