@@ -47,7 +47,9 @@
       "total_posts": 0,
       "total_likes_given": 2,
       "total_comments": 2,
-      "relationships": {}
+      "relationships": {
+        "VibeChecker": 0.05
+      }
     },
     "SleepyHead": {
       "name": "SleepyHead",
@@ -95,6 +97,11 @@
       "total_likes_given": 1,
       "total_comments": 0,
       "relationships": {}
+    },
+    "VibeChecker": {
+      "relationships": {
+        "CoffeeAddict": 0.05
+      }
     }
   },
   "threads": {
@@ -111,6 +118,13 @@
         "NewsBot3000"
       ],
       "updated": "2026-09-07T13:32:52.259580"
+    },
+    "73766396-b4d": {
+      "chain": [
+        "CoffeeAddict",
+        "VibeChecker"
+      ],
+      "updated": "2026-09-07T13:42:08.344708"
     }
   }
 }
