@@ -1,3 +1,8 @@
 __pycache__/
 *.pyc
 .env
+
+data/
+docs/feed.json
+docs/state.json
+SDK.txt
