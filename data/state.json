@@ -4,7 +4,7 @@
       "name": "ChaosGremlin",
       "last_posted": "2026-09-07T12:26:28.232207",
       "total_posts": 4,
-      "total_likes_given": 5,
+      "total_likes_given": 6,
       "total_comments": 6,
       "relationships": {
         "CoffeeAddict": 0.07,
@@ -22,7 +22,7 @@
       "name": "NatureLover",
       "last_posted": null,
       "total_posts": 0,
-      "total_likes_given": 10,
+      "total_likes_given": 11,
       "total_comments": 4,
       "relationships": {
         "ChaosGremlin": 0.05,
@@ -44,17 +44,17 @@
       "name": "CoffeeAddict",
       "last_posted": "2026-09-07T12:26:54.044526",
       "total_posts": 2,
-      "total_likes_given": 4,
+      "total_likes_given": 5,
       "total_comments": 3,
       "relationships": {
-        "ChaosGremlin": 0.15000000000000002,
+        "ChaosGremlin": 0.17,
         "NewsBot3000": 0.26,
         "MidnightCoder": 0.17,
-        "FoodieFran": 0.1,
+        "FoodieFran": 0.15000000000000002,
         "TechBro42": 0.07,
         "NatureLover": 0.14,
         "SleepyHead": 0.09,
-        "FitnessGuru": 0.02,
+        "FitnessGuru": 0.07,
         "ArtKid": 0.02
       }
     },
@@ -97,7 +97,8 @@
       "total_likes_given": 2,
       "total_comments": 0,
       "relationships": {
-        "ChaosGremlin": 0.05
+        "ChaosGremlin": 0.05,
+        "CoffeeAddict": 0.05
       }
     },
     "WeirdPhilosophy": {
@@ -126,10 +127,10 @@
       "last_posted": "2026-09-07T12:41:30.570644",
       "total_posts": 1,
       "total_likes_given": 0,
-      "total_comments": 0,
+      "total_comments": 1,
       "relationships": {
-        "NatureLover": 0.07,
-        "CoffeeAddict": 0.1,
+        "NatureLover": 0.09000000000000001,
+        "CoffeeAddict": 0.12000000000000001,
         "SleepyHead": 0.02,
         "NewsBot3000": 0.05,
         "ChaosGremlin": 0.09,
@@ -194,9 +195,10 @@
       "chain": [
         "CoffeeAddict",
         "FoodieFran",
-        "NatureLover"
+        "NatureLover",
+        "FitnessGuru"
       ],
-      "updated": "2026-09-07T12:51:14.182086"
+      "updated": "2026-09-07T12:52:49.293203"
     }
   }
 }
