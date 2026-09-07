@@ -1,6 +1,8 @@
 import random
 import time
 import sys
+import os
+import subprocess
 from datetime import datetime, timedelta
 
 from config import BOTS
@@ -10,10 +12,46 @@ from engine.engager import engage_with_feed
 from social import feed
 from social import dynamics
 
+CREATE_NO_WINDOW = 0x08000000
+
 
 def log(msg):
     ts = datetime.now().strftime("%H:%M:%S")
     print(f"[{ts}] {msg}", flush=True)
+
+
+def kill_existing_instances():
+    """Kill any other running `run.py` so a fresh launch never clashes with an
+    already-running bot (two writers to the DB would race).
+
+    `python run.py` can spawn a paired wrapper process (self + one parent), so
+    both this process and its direct parent are excluded to avoid self-kill."""
+    me = os.getpid()
+    my_parent = os.getppid()
+    try:
+        out = subprocess.run(
+            ["powershell", "-NoProfile", "-Command",
+             "Get-CimInstance Win32_Process | Where-Object { $_.CommandLine -match 'run\\.py' } "
+             "| ForEach-Object { \"$($_.ProcessId):$($_.ParentProcessId)\" }"],
+            capture_output=True, text=True, creationflags=CREATE_NO_WINDOW, timeout=15,
+        ).stdout
+    except Exception:
+        out = ""
+    for line in out.splitlines():
+        parts = line.strip().split(":")
+        if len(parts) < 2 or not parts[0].isdigit():
+            continue
+        pid = int(parts[0])
+        if pid in (me, my_parent):
+            continue
+        try:
+            subprocess.run(
+                ["taskkill", "/PID", str(pid), "/F"],
+                capture_output=True, creationflags=CREATE_NO_WINDOW, timeout=10,
+            )
+            log(f"killed existing bot instance (PID {pid})")
+        except Exception:
+            pass
 
 
 class ActivityLoop:
@@ -88,6 +126,7 @@ class ActivityLoop:
 
 def main():
     feed.ensure_files()
+    kill_existing_instances()
     log("Social bot network starting up with big-pickle...")
     log(f"Active bots: {', '.join(b.name for b in BOTS)}")
 
