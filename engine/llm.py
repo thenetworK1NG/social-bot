@@ -42,11 +42,40 @@ def generate_text(prompt: str, timeout: int = 180) -> str:
         text = _clean_output(output)
         if not text and result.stderr:
             text = _clean_output(result.stderr)
-        return text.strip()
+        text = text.strip()
+        # Reject meta/out-of-character output so callers can retry with a fallback
+        if _is_meta_noise(text):
+            return ""
+        return text
     except subprocess.TimeoutExpired:
         return ""
     except Exception:
         return ""
+
+
+_META_NOISE_PHRASES = [
+    "this is a social media simulation",
+    "the user is asking me",
+    "you are", "you're", "as your assistant",
+    "isn't relevant to this task",
+    "not relevant to the task",
+    "i'm here to help",
+    "as an ai",
+    "as an ai language model",
+    "i don't have the ability",
+    "i cannot",
+    "let me explain",
+    "the prompt asks",
+    "the notes skill",
+]
+
+
+def _is_meta_noise(text: str) -> bool:
+    if not text:
+        return True
+    low = text.lower()
+    hits = sum(1 for p in _META_NOISE_PHRASES if p in low)
+    return hits >= 2
 
 
 def _clean_output(output: str) -> str:
