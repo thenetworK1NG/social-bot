@@ -62,16 +62,24 @@ def _build_batch_prompt(slots):
         parts.append(
             f"[{i}] Bot: {bot.name} — personality: {bot.personality_prompt}."
             f" A friend named {post.author} posted: \"{post.content}\".{context}"
-            f" They react casually, in their own voice, one sentence. Do not quote"
-            f" or repeat the post back.{emoji}"
+            f" They react casually, in their own voice, in 1-2 sentences (sometimes more"
+            f" if a quick story fits). Do not quote or repeat the post back.{emoji}"
         )
     return (
-        "Write comments for fictional social media users reacting to a friend's post."
-        " Make them sound like actual people, not an AI. Real comments are short,"
-        " casual, reference something specific from the post, and have personality."
-        " Use slang, typos occasionally, or abbreviations. Don't be generic."
-        " React emotionally, not analytically. Each comment should feel like a"
-        " natural response a real friend would leave.\n"
+        f"Today is {datetime.now().strftime('%B %d, %Y')}. You write comments for a real"
+        " social network. Every comment must sound like an actual human typed it — no AI"
+        " filler like 'that is so true!'. Different commenters have different styles.\n"
+        "Rules for EACH comment:\n"
+        " - React to something specific in the post: pull out a detail, an idea, or the"
+        " vibe, and engage with THAT (if it is a question, actually answer it).\n"
+        " - Add real content: a personal example, a hot take, a question back, a small"
+        " story, a useful tip, or a joke.\n"
+        " - In roughly 1 of 3 comments drop a real-world reference: pop culture, music," 
+        " TV or movies, sports, technology, internet memes, food, travel — only reference"
+        " things you are confident actually exist. Never invent news, products, or facts.\n"
+        " - Match the post's energy and the bot's personality. Vary length across the"
+        " batch (one-liners and two-liners and occasionally a short paragraph). Use"
+        " contractions, casual punctuation, and slang. No summarizing.\n"
         + "\n".join(parts)
         + "\nReturn a JSON array with EXACTLY the same number of string entries,"
           " in the same order — one comment per user."
@@ -181,11 +189,14 @@ def _maybe_extend_thread(post):
         return
     replier = random.choice(candidates)
     prompt = (
-        f"{replier.name} is a user with this personality: {replier.personality_prompt}. "
+        f"Today is {datetime.now().strftime('%B %d, %Y')}. {replier.name} is a user"
+        f" with this personality: {replier.personality_prompt}. "
         f"{comment.author} commented \"{comment.content}\" on a post by {post.author}. "
-        f"Reply the way a real friend would reply to a comment — one short sentence,"
-        f" casual, reference something specific, do not quote it back."
-        f" {'Use emojis.' if replier.uses_emojis else 'No emojis.'}"
+        f"Reply like a real friend continuing the conversation — reference something"
+        f" specific from the comment and add real content (a personal bit, a hot take,"
+        f" a relatable detail, or a real-world reference you are confident exists — pop"
+        f" culture, tech, sports, memes). Do not quote it back or summarize. 1-2 short sentences. "
+        f"{'Use emojis.' if replier.uses_emojis else 'No emojis.'}"
     )
     reply_content = generate_text(prompt)
     if not reply_content:
