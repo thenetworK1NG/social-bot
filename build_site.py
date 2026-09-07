@@ -3,6 +3,7 @@
 
 import json
 import os
+import re
 import shutil
 from datetime import datetime
 
@@ -119,11 +120,18 @@ def _esc(text):
 
 
 def clean_content(text):
-    """Remove leftover model artifacts like 'X's reply:' labels."""
+    """Remove leftover model artifacts: 'X's reply:', '**X** replied:', meta narrations, html."""
     text = str(text)
-    import re as _re
-    text = _re.sub(r'^[A-Za-z0-9]+@?\w*\'?s (reply|response|answer)s?:', '', text)
-    text = _re.sub(r'^Here\'s (a|my) response( as \w+)?:', '', text)
+    # strip html tags / blockquotes
+    text = re.sub(r'<[^>]+>', '', text)
+    # leading labels like "Name's reply:", "**Name** replied:", "Final response as Name:", "*Name here*"
+    text = re.sub(r'^(\*\*)?[A-Za-z0-9@ ]+?(@?\w*)?\'?s (reply|response|answer|thought)s?:', '', text)
+    text = re.sub(r'^\*\*[A-Za-z0-9 ]+\*\* (replied|said|wrote|commented)s?:', '', text)
+    text = re.sub(r'^\*[A-Za-z0-9 ]+ (here|speaking|writing)\*', '', text)
+    text = re.sub(r'^Here\'s (a|my|the) (final |)response( as \w+)?:?', '', text)
+    text = re.sub(r'^(since|because) (this |i am|i\'m).*', '', text)
+    # collapse leftover leading whitespace/newlines after label removal
+    text = text.strip('\n *')
     return text.strip()
 
 
