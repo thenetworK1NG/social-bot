@@ -15,19 +15,27 @@ def git(*args):
     )
 
 
-def has_changes():
+def has_changes(paths=("data",)):
+    """Check if any tracked changes exist under given path(s)."""
     r = git("status", "--porcelain")
-    return bool((r.stdout or "").strip())
+    lines = (r.stdout or "").splitlines()
+    rel = os.path.relpath(REPO_DIR, REPO_DIR)
+    for line in lines:
+        p = line[3:].strip().replace("\\", "/")
+        if any(p.startswith(base) for base in paths):
+            return True
+    return False
 
 
 def push(message: str) -> bool:
-    """Commit any data changes and push. Returns True if pushed."""
-    if not has_changes():
+    """Commit data changes and push. Returns True if pushed."""
+    # Only stage our own data; GitHub Actions rebuilds docs/ from it.
+    if not has_changes(("data",)):
         return False
 
-    git("add", "-A")
+    git("add", "--", "data")
     commit = git("commit", "-m", message)
-    if commit.returncode != 0 and "nothing to commit" not in (commit.stdout or ""):
+    if commit.returncode != 0:
         return False
 
     # Pull remote (e.g. rebuild commits from Actions) then push, with retries.
@@ -38,9 +46,9 @@ def push(message: str) -> bool:
         pull = git("pull", "--rebase", "--autostash")
         if pull.returncode != 0:
             return False
-        if not has_changes():
-            # local commits were rebased; push them
-            continue
+        rc = _try_push()
+        if rc:
+            return True
     return _try_push()
 
 
@@ -62,7 +70,7 @@ def build_site():
 
 
 def autopush():
-    """Rebuild site, commit data+site, and push."""
+    """Commit feed data and push. docs/ is rebuilt by GitHub Actions."""
     from social import feed
     posts = feed.load_feed()
     if not posts:
@@ -73,6 +81,4 @@ def autopush():
         ts = datetime.now().strftime("%b %d %H:%M")
         msg = f"bot update {ts}: {len(posts)} posts, {n_likes} likes, {n_comments} comments"
 
-    # Always rebuild so the Pages site stays in sync
-    build_site()
     push(msg)
