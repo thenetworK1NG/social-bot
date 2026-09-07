@@ -1,4 +1,5 @@
 import random
+import re
 from datetime import datetime, timedelta
 
 from config import BOTS, TOPICS, drama_topics
@@ -7,6 +8,40 @@ from social import feed
 from social import dynamics
 from social.models import Post
 from engine.scheduler import is_bot_active
+
+_STOP = frozenset(
+    "i me my you he she it we they am is are was were be been being have has had "
+    "do does did will shall may can could would should might must need a an the "
+    "and or but if then so for of to in on at by with from up about into over after "
+    "that this these those what which who whom when where how why all any both each "
+    "few more most other some such no nor not only own same than just don now ok like "
+    "tbh honestly basically actually also really very much today way kind something "
+    "thing things dont wanna gonna imo idk smh ngl lol lmao bruh bro nah yeah yall lol"
+    .split()
+)
+
+
+def _keywords(text):
+    return [w for w in re.findall(r"[a-z]{3,}", (text or "").lower()) if w not in _STOP]
+
+
+def _too_similar(content, recent_posts):
+    new_kw = set(_keywords(content))
+    if not new_kw:
+        return False
+    for p in recent_posts[:5]:
+        old_kw = set(_keywords(p.content if hasattr(p, "content") else ""))
+        if old_kw and len(new_kw & old_kw) >= 0.4 * len(new_kw):
+            return True
+    return False
+
+
+def _recent_topic_hint(recent_posts):
+    """Summarise recent topics so the prompt can explicitly avoid them."""
+    if not recent_posts:
+        return ""
+    snippets = [(p.content if hasattr(p, "content") else "")[:70] for p in recent_posts[:4]]
+    return "\nRecent posts already covered: " + " | ".join(f"\"{s}\"" for s in snippets if s) + "."
 
 
 def pick_bot_to_post():
@@ -52,8 +87,9 @@ def build_post_prompt(bot, post_type, recent_posts, now_str):
             f"{bot.name} is a user whose bio is: {bot.bio}. Personality: {bot.personality_prompt}. "
             f"Current time: {now_str}. "
             f"Ask your followers a genuine casual question ({random.choice(drama_topics)} related or daily life). "
-            f"One sentence, sounds like a real person reaching out."
-            f"{' Emojis welcome.' if bot.uses_emojis else ' No emojis.'}"
+            f"Pick a fresh angle — do not repeat recent themes. One sentence, sounds like a real person reaching out."
+            + _recent_topic_hint(recent_posts)
+            + f"{' Emojis welcome.' if bot.uses_emojis else ' No emojis.'}"
         )
     if post_type == "followup":
         own = [p for p in recent_posts if p.author == bot.name][0]
@@ -77,7 +113,8 @@ def build_post_prompt(bot, post_type, recent_posts, now_str):
         f"Current time: {now_str}. "
         f"Write a single natural social media post about {topic} (1-2 sentences). "
         f"Casual, authentic, sometimes imperfect — like a real person typing. No hashtags."
-        f"{' Emojis welcome.' if bot.uses_emojis else ' No emojis.'}"
+        + _recent_topic_hint(recent_posts)
+        + f"{' Emojis welcome.' if bot.uses_emojis else ' No emojis.'}"
     )
 
 
@@ -88,9 +125,22 @@ def create_post():
     recent_posts = feed.get_recent_posts(5)
     post_type = decide_post_type(bot, recent_posts, feed.load_state())
     prompt = build_post_prompt(bot, post_type, recent_posts, now_str)
-    content = generate_text(prompt)
+
+    content = None
+    for attempt in range(3):
+        extra = ""
+        if attempt > 0:
+            extra = (
+                _recent_topic_hint(recent_posts)
+                + " That topic was already used — write about something completely different."
+            )
+        candidate = generate_text(prompt + extra)
+        if candidate and not _too_similar(candidate, recent_posts):
+            content = candidate
+            break
     if not content:
         content = _fallback_post(bot)
+
     post = Post(
         author=bot.name,
         content=content,
