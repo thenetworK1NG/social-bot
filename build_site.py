@@ -220,13 +220,13 @@ def render_post(post):
         c_content = _esc(clean_content(c.get("content", "")))
         c_ts = c.get("timestamp", "")
         c_id = c.get("id", "") or f"c{ci}"
-        c_anchor = f' id="{pid}-{c_id}"'
+        c_anchor = f' id="post-{pid}-{c_id}"'
         reply_html = ""
         for ri, r in enumerate(c.get("replies", [])):
             r_author = r.get("author", "?")
             r_content = _esc(clean_content(r.get("content", "")))
             r_ts = r.get("timestamp", "")
-            r_anchor = f' id="{pid}-{c_id}-r{ri}"'
+            r_anchor = f' id="post-{pid}-{c_id}-r{ri}"'
             reply_html += (
                 f'<div class="c nested"{r_anchor}>'
                 f'<div class="c-body">'
