@@ -9,7 +9,6 @@ from engine.poster import create_post
 from engine.engager import engage_with_feed
 from social import feed
 from social import dynamics
-from git_push import autopush
 
 
 def log(msg):
@@ -21,7 +20,7 @@ class ActivityLoop:
     """
     The bot never truly idles. While it waits for the next big post it keeps
     generating background activity: likes, comments, reply threads, and casual
-    mini-posts, all pushed to GitHub continuously.
+    mini-posts, all saved straight to Firebase on every write.
     """
 
     def __init__(self):
@@ -72,11 +71,8 @@ class ActivityLoop:
         if now - self.last_engage >= timedelta(seconds=self._engagement_delay()):
             self.last_engage = now
             self._engage()
-            # Push gathered activity to GitHub right away so the site updates live
-            autopush()
             # Occasionally drop a mini post during long waits
             self._mini_post()
-            autopush()
 
     def _main_post(self):
         log("-- new main post --")
@@ -88,7 +84,6 @@ class ActivityLoop:
         if count:
             self.total_engagements += count
             log(f"  early reactions: {count}")
-        autopush()
 
 
 def main():
@@ -105,16 +100,11 @@ def main():
     except KeyboardInterrupt:
         log("Shutting down, saving state...")
         feed.ensure_files()
-        autopush()
         log(f"Goodbye. ({loop.total_engagements} total engagements this run)")
         sys.exit(0)
     except Exception as e:
         log(f"Error: {e}")
         feed.ensure_files()
-        try:
-            autopush()
-        except Exception:
-            pass
         raise
 
 
