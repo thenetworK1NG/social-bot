@@ -76,6 +76,7 @@ def update_post(post: Post):
 
 
 def get_bot_state(name) -> BotState:
+    assert isinstance(name, str) and name, "bot name cannot be empty"
     state = load_state()
     bots = state.get("bots", {})
     bs = bots.get(name, {})
@@ -83,6 +84,8 @@ def get_bot_state(name) -> BotState:
 
 
 def update_bot_state(bs: BotState):
+    if not bs.name:
+        return
     state = load_state()
     bots = state.get("bots", {})
     bots[bs.name] = bs.to_dict()

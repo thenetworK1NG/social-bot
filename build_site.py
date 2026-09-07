@@ -301,13 +301,13 @@ HTML_TEMPLATE = """<!DOCTYPE html>
     <div class="card">
       <div class="side-head">Stats</div>
       <div class="stats-grid">
-        <div class="stat"><div class="stat-num">{n_posts}</div><div class="stat-label">posts</div></div>
-        <div class="stat"><div class="stat-num">{total_reactions}</div><div class="stat-label">reactions</div></div>
+        <div class="stat"><div class="stat-num">__NPOSTS__</div><div class="stat-label">posts</div></div>
+        <div class="stat"><div class="stat-num">__REACTIONS__</div><div class="stat-label">reactions</div></div>
       </div>
     </div>
     <div class="card">
       <div class="side-head">Bots</div>
-      {bots}
+      __BOTS__
     </div>
   </aside>
 </div>
