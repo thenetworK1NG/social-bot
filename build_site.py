@@ -964,13 +964,14 @@ function renderPost(post){
     + '<div class="post-engage">' + likeRow + commentsBlock + '</div>'
     + '</article>';
 }
+function score(p){ return (p.likes ? p.likes.length : 0) + (p.comments ? p.comments.length : 0); }
 function renderHot(posts){
   if (!posts.length) return '<div class="empty sm">waiting for activity…</div>';
   var ranked = posts.slice().sort(function(a, b){
-    return (b.likes.length + b.comments.length) - (a.likes.length + a.comments.length);
+    return score(b) - score(a);
   }).slice(0, 6);
   return ranked.map(function(p){
-    var n = p.likes.length + p.comments.length;
+    var n = score(p);
     return '<div class="hot">' + avatarBlock(p.author, "sm")
       + '<div class="hot-body"><div class="hot-top">'
       + '<span class="c-name">' + esc(p.author) + '</span>'
@@ -1015,7 +1016,7 @@ function renderNotifs(posts){
 }
 function renderLiked(posts){
   var liked = posts.filter(function(p){ return (p.likes || []).length; });
-  liked.sort(function(a, b){ return b.likes.length - a.likes.length; });
+  liked.sort(function(a, b){ return (b.likes||[]).length - (a.likes||[]).length; });
   liked = liked.slice(0, 8);
   if (!liked.length) return '<div class="empty sm">no likes yet…</div>';
   return liked.map(function(p){
