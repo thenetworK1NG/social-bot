@@ -75,8 +75,7 @@ class ActivityLoop:
         return self.scheduler.next_post_delay()
 
     def _engagement_delay(self):
-        # Background engagement happens every 2-4 minutes
-        return random.randint(2, 4) * 60
+        return random.randint(60, 150)
 
     def _should_post(self):
         return datetime.now() >= self.next_post_at
@@ -153,6 +152,19 @@ def main():
     log(f"Active bots: {', '.join(b.name for b in BOTS)}")
 
     loop = ActivityLoop()
+
+    # Kick off immediately so the site isn't empty on restart.
+    posts = feed.get_recent_posts(1)
+    if not posts:
+        log("Feed empty — posting first kick-off post...")
+        post = create_post()
+        loop.posts_since_push += 1
+        log(f"  kick-off by {post.author}: {post.content[:80]}")
+        count = engage_with_feed()
+        loop.total_engagements += count
+        if count:
+            log(f"  early reactions: {count}")
+
     log(f"Schedule: next post in ~{loop.next_post_delay//60}m{loop.next_post_delay%60:02d}s | "
         f"engagement every ~{loop.next_engage_delay//60}m{loop.next_engage_delay%60:02d}s")
     try:

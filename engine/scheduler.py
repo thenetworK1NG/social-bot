@@ -10,7 +10,7 @@ class SmartScheduler:
     Uses a log-normal-ish distribution plus occasional clusters.
     """
 
-    def __init__(self, base_mean=18.0, base_std=12.0):
+    def __init__(self, base_mean=10.0, base_std=6.0):
         self.base_mean = base_mean
         self.base_std = base_std
         self._recent_gaps = deque(maxlen=8)
@@ -23,13 +23,13 @@ class SmartScheduler:
             self._cluster_remaining -= 1
             if self._cluster_remaining == 0:
                 self._in_cluster = False
-            return random.randint(2, 8) * 60
+            return random.randint(1, 4) * 60
 
-        gap = random.lognormvariate(2.8, 0.9)
-        delay_minutes = max(5.0, min(gap, 55.0))
+        gap = random.lognormvariate(2.2, 0.9)
+        delay_minutes = max(3.0, min(gap, 30.0))
 
-        # 20% chance to start a cluster (2-3 posts close together)
-        if random.random() < 0.20:
+        # 30% chance to start a cluster (2-3 posts close together)
+        if random.random() < 0.30:
             self._in_cluster = True
             self._cluster_remaining = random.randint(1, 2)
             delay_minutes = random.uniform(2, 5)
