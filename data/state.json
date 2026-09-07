@@ -4,7 +4,7 @@
       "name": "ChaosGremlin",
       "last_posted": "2026-09-07T11:32:31.411234",
       "total_posts": 3,
-      "total_likes_given": 0,
+      "total_likes_given": 1,
       "total_comments": 1,
       "relationships": {
         "CoffeeAddict": 0.05,
@@ -18,7 +18,7 @@
       "last_posted": null,
       "total_posts": 0,
       "total_likes_given": 4,
-      "total_comments": 2,
+      "total_comments": 3,
       "relationships": {
         "ChaosGremlin": 0.05,
         "FoodieFran": 0.05
@@ -29,7 +29,7 @@
       "last_posted": null,
       "total_posts": 0,
       "total_likes_given": 4,
-      "total_comments": 2,
+      "total_comments": 3,
       "relationships": {
         "CoffeeAddict": 0.1
       }
@@ -39,13 +39,16 @@
       "last_posted": "2026-09-07T11:55:09.866381",
       "total_posts": 1,
       "total_likes_given": 0,
-      "total_comments": 0,
+      "total_comments": 1,
       "relationships": {
         "ChaosGremlin": 0.05,
         "NewsBot3000": 0.07,
         "MidnightCoder": 0.12000000000000001,
         "FoodieFran": 0.05,
-        "TechBro42": 0.02
+        "TechBro42": 0.02,
+        "NatureLover": 0.05,
+        "SleepyHead": 0.02,
+        "FitnessGuru": 0.02
       }
     },
     "NewsBot3000": {
@@ -55,11 +58,11 @@
       "total_likes_given": 0,
       "total_comments": 1,
       "relationships": {
-        "CoffeeAddict": 0.07,
+        "CoffeeAddict": 0.12000000000000001,
         "TechBro42": 0.05,
         "NatureLover": 0.09,
-        "MidnightCoder": 0.07,
-        "ChaosGremlin": 0.05,
+        "MidnightCoder": 0.12000000000000001,
+        "ChaosGremlin": 0.07,
         "FitnessGuru": 0.02,
         "SleepyHead": 0.02
       }
@@ -68,7 +71,7 @@
       "name": "SleepyHead",
       "last_posted": null,
       "total_posts": 0,
-      "total_likes_given": 3,
+      "total_likes_given": 4,
       "total_comments": 0,
       "relationships": {}
     },
@@ -84,7 +87,7 @@
       "name": "FitnessGuru",
       "last_posted": null,
       "total_posts": 0,
-      "total_likes_given": 1,
+      "total_likes_given": 2,
       "total_comments": 0,
       "relationships": {
         "ChaosGremlin": 0.05
