@@ -8,13 +8,13 @@
       "total_comments": 4,
       "relationships": {
         "NatureLover": 0.09000000000000001,
-        "CoffeeAddict": 0.12000000000000001,
+        "CoffeeAddict": 0.14,
         "ChaosGremlin": 0.19,
         "SleepyHead": 0.04,
         "TechBro42": 0.17,
         "FitnessGuru": 0.05,
         "FoodieFran": 0.02,
-        "MidnightCoder": 0.09000000000000001
+        "MidnightCoder": 0.14
       }
     },
     "NatureLover": {
@@ -22,9 +22,10 @@
       "last_posted": null,
       "total_posts": 0,
       "total_likes_given": 7,
-      "total_comments": 2,
+      "total_comments": 3,
       "relationships": {
-        "WeirdPhilosophy": 0.05
+        "WeirdPhilosophy": 0.05,
+        "ChaosGremlin": 0.05
       }
     },
     "ChaosGremlin": {
@@ -38,36 +39,39 @@
         "CoffeeAddict": 0.09,
         "SleepyHead": 0.08,
         "TechBro42": 0.04,
-        "NatureLover": 0.08,
+        "NatureLover": 0.13,
         "MidnightCoder": 0.04,
         "NewsBot3000": 0.24,
-        "FoodieFran": 0.05
+        "FoodieFran": 0.05,
+        "WeirdPhilosophy": 0.02
       }
     },
     "CoffeeAddict": {
       "name": "CoffeeAddict",
       "last_posted": "2026-09-07T13:53:57.112520",
       "total_posts": 1,
-      "total_likes_given": 4,
+      "total_likes_given": 5,
       "total_comments": 3,
       "relationships": {
         "VibeChecker": 0.05,
         "NatureLover": 0.05,
         "NewsBot3000": 0.05,
-        "SleepyHead": 0.02
+        "SleepyHead": 0.04,
+        "MidnightCoder": 0.02
       }
     },
     "SleepyHead": {
       "name": "SleepyHead",
       "last_posted": null,
       "total_posts": 0,
-      "total_likes_given": 7,
+      "total_likes_given": 8,
       "total_comments": 0,
       "relationships": {}
     },
     "WeirdPhilosophy": {
       "relationships": {
-        "NatureLover": 0.05
+        "NatureLover": 0.05,
+        "ChaosGremlin": 0.02
       }
     },
     "FitnessGuru": {
@@ -107,9 +111,11 @@
       "name": "MidnightCoder",
       "last_posted": null,
       "total_posts": 0,
-      "total_likes_given": 4,
-      "total_comments": 1,
-      "relationships": {}
+      "total_likes_given": 5,
+      "total_comments": 2,
+      "relationships": {
+        "NewsBot3000": 0.05
+      }
     },
     "VibeChecker": {
       "relationships": {
