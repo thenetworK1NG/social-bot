@@ -17,7 +17,7 @@
       "name": "NatureLover",
       "last_posted": null,
       "total_posts": 0,
-      "total_likes_given": 4,
+      "total_likes_given": 5,
       "total_comments": 3,
       "relationships": {
         "ChaosGremlin": 0.05,
@@ -46,15 +46,15 @@
         "MidnightCoder": 0.12000000000000001,
         "FoodieFran": 0.05,
         "TechBro42": 0.02,
-        "NatureLover": 0.05,
+        "NatureLover": 0.07,
         "SleepyHead": 0.02,
         "FitnessGuru": 0.02
       }
     },
     "NewsBot3000": {
       "name": "NewsBot3000",
-      "last_posted": "2026-09-07T11:40:18.982052",
-      "total_posts": 2,
+      "last_posted": "2026-09-07T12:15:52.357898",
+      "total_posts": 3,
       "total_likes_given": 0,
       "total_comments": 1,
       "relationships": {
