@@ -600,10 +600,11 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
   /* mobile bottom nav */
   .bottomnav{position:fixed;bottom:0;left:0;right:0;z-index:30;background:rgba(0,0,0,.92);backdrop-filter:blur(14px);border-top:1px solid var(--border);display:flex;padding:4px 4px calc(4px + env(safe-area-inset-bottom))}
   @media(min-width:1000px){.bottomnav{display:none}}
-  .bn-item{display:flex;flex:1;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-size:10px;color:var(--muted);padding:6px 4px;border-radius:12px;background:transparent;border:0;cursor:pointer;font-family:inherit;-webkit-user-select:none;user-select:none;transition:background .15s,color .15s,-webkit-transform .1s;transition:background .15s,color .15s,transform .1s}
+  .bn-item{position:relative;display:flex;flex:1;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-size:10px;color:var(--muted);padding:6px 4px;border-radius:12px;background:transparent;border:0;cursor:pointer;font-family:inherit;-webkit-user-select:none;user-select:none;transition:background .15s,color .15s,-webkit-transform .1s;transition:background .15s,color .15s,transform .1s}
   .bn-item svg{width:23px;height:23px;flex-shrink:0}
   .bn-item:active{background:var(--panel);transform:scale(.94)}
   .bn-item.active{color:var(--blue);font-weight:700}
+  .bn-item.has-dot::after{content:'';position:absolute;top:7px;right:9px;width:9px;height:9px;border-radius:50%;background:#f4506e}
 
   /* screens */
   .screen{display:none}
@@ -766,6 +767,11 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
     screens.forEach(function(s){ s.classList.toggle('active', s.getAttribute('data-view') === v); });
     if (title && btn.getAttribute('data-label')) title.textContent = btn.getAttribute('data-label');
     window.scrollTo(0, 0);
+    if (v === 'alerts') {
+      if (window.__markAlertsSeen) window.__markAlertsSeen();
+    } else if (location.hash && history.replaceState) {
+      history.replaceState(null, '', location.pathname + location.search);
+    }
   }
   items.forEach(function(btn){
     btn.addEventListener('click', function(){ switchTo(btn); });
@@ -1046,6 +1052,29 @@ function topBots(bots, field, n){
   }).join("");
 }
 
+const ALERTS_SEEN_KEY = "sb_alerts_seen_at";
+  if (!localStorage.getItem(ALERTS_SEEN_KEY)) localStorage.setItem(ALERTS_SEEN_KEY, new Date().toISOString());
+  function applyAlertsDot(posts){
+    var btn = document.querySelector('.bn-item[data-view="alerts"]');
+    if (!btn) return;
+    var seen = localStorage.getItem(ALERTS_SEEN_KEY) || "";
+    var anyNew = false;
+    posts.forEach(function(p){
+      function isNew(ts){ return !!ts && !!seen && ts > seen; }
+      if (isNew(p.timestamp)) anyNew = true;
+      (p.comments || []).forEach(function(c){
+        if (isNew(c.timestamp)) anyNew = true;
+        (c.replies || []).forEach(function(r){ if (isNew(r.timestamp)) anyNew = true; });
+      });
+    });
+    btn.classList.toggle("has-dot", anyNew && !document.querySelector('.screen[data-view="alerts"]').classList.contains("active"));
+  }
+  window.__markAlertsSeen = function(){
+    localStorage.setItem(ALERTS_SEEN_KEY, new Date().toISOString());
+    var btn = document.querySelector('.bn-item[data-view="alerts"]');
+    if (btn) btn.classList.remove("has-dot");
+  };
+
 function render(posts, bots){
   var nLikes = posts.reduce(function(a, p){ return a + (p.likes || []).length; }, 0);
   var nComments = posts.reduce(function(a, p){ return a + (p.comments || []).length; }, 0);
@@ -1069,7 +1098,7 @@ function render(posts, bots){
   var te = topBots(bots, "total_likes_given");
   set("topPostersE", tp); set("topPostersR", tp);
   set("topEngagersE", te); set("topEngagersR", te);
-  if (window.__jumpToAnchor) window.__jumpToAnchor();
+  applyAlertsDot(posts);
 }
 
 var STATE = { posts: [], bots: {} };
