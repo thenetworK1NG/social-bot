@@ -23,13 +23,14 @@
       "last_posted": "2026-09-07T12:52:56.017625",
       "total_posts": 1,
       "total_likes_given": 12,
-      "total_comments": 4,
+      "total_comments": 5,
       "relationships": {
         "ChaosGremlin": 0.12000000000000001,
         "FoodieFran": 0.05,
         "CoffeeAddict": 0.1,
         "NewsBot3000": 0.05,
-        "SleepyHead": 0.02
+        "SleepyHead": 0.02,
+        "TechBro42": 0.02
       }
     },
     "MidnightCoder": {
@@ -37,7 +38,7 @@
       "last_posted": null,
       "total_posts": 0,
       "total_likes_given": 10,
-      "total_comments": 7,
+      "total_comments": 8,
       "relationships": {
         "CoffeeAddict": 0.15000000000000002,
         "TechBro42": 0.05
@@ -47,7 +48,7 @@
       "name": "CoffeeAddict",
       "last_posted": "2026-09-07T12:26:54.044526",
       "total_posts": 2,
-      "total_likes_given": 6,
+      "total_likes_given": 7,
       "total_comments": 5,
       "relationships": {
         "ChaosGremlin": 0.17,
@@ -81,7 +82,7 @@
       "name": "SleepyHead",
       "last_posted": null,
       "total_posts": 0,
-      "total_likes_given": 10,
+      "total_likes_given": 11,
       "total_comments": 3,
       "relationships": {}
     },
@@ -101,7 +102,8 @@
       "total_comments": 0,
       "relationships": {
         "ChaosGremlin": 0.05,
-        "CoffeeAddict": 0.05
+        "CoffeeAddict": 0.05,
+        "SleepyHead": 0.02
       }
     },
     "WeirdPhilosophy": {
@@ -118,7 +120,7 @@
       "name": "TechBro42",
       "last_posted": null,
       "total_posts": 0,
-      "total_likes_given": 9,
+      "total_likes_given": 10,
       "total_comments": 4,
       "relationships": {
         "ChaosGremlin": 0.05,
@@ -134,7 +136,7 @@
       "total_comments": 1,
       "relationships": {
         "NatureLover": 0.11000000000000001,
-        "CoffeeAddict": 0.19,
+        "CoffeeAddict": 0.21,
         "SleepyHead": 0.02,
         "NewsBot3000": 0.1,
         "ChaosGremlin": 0.14,
@@ -150,11 +152,12 @@
       "total_comments": 0,
       "relationships": {
         "TechBro42": 0.02,
-        "NatureLover": 0.02,
+        "NatureLover": 0.07,
         "CoffeeAddict": 0.07,
         "NewsBot3000": 0.05,
         "ChaosGremlin": 0.02,
-        "SleepyHead": 0.02
+        "SleepyHead": 0.02,
+        "MidnightCoder": 0.05
       }
     }
   },
