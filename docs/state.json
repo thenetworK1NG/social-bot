@@ -35,8 +35,8 @@
       "total_likes_given": 3,
       "total_comments": 2,
       "relationships": {
-        "FitnessGuru": 0.09000000000000001,
-        "CoffeeAddict": 0.16,
+        "FitnessGuru": 0.11000000000000001,
+        "CoffeeAddict": 0.21000000000000002,
         "SleepyHead": 0.08,
         "TechBro42": 0.06,
         "NatureLover": 0.13,
@@ -51,7 +51,7 @@
       "last_posted": "2026-09-07T14:25:44.739471",
       "total_posts": 2,
       "total_likes_given": 6,
-      "total_comments": 5,
+      "total_comments": 6,
       "relationships": {
         "VibeChecker": 0.05,
         "NatureLover": 0.05,
@@ -59,7 +59,7 @@
         "SleepyHead": 0.04,
         "MidnightCoder": 0.02,
         "FoodieFran": 0.05,
-        "ChaosGremlin": 0.07
+        "ChaosGremlin": 0.12000000000000001
       }
     },
     "SleepyHead": {
@@ -68,7 +68,9 @@
       "total_posts": 1,
       "total_likes_given": 8,
       "total_comments": 0,
-      "relationships": {}
+      "relationships": {
+        "TechBro42": 0.05
+      }
     },
     "WeirdPhilosophy": {
       "relationships": {
@@ -80,7 +82,7 @@
       "name": "FitnessGuru",
       "last_posted": null,
       "total_posts": 0,
-      "total_likes_given": 2,
+      "total_likes_given": 3,
       "total_comments": 1,
       "relationships": {
         "NewsBot3000": 0.05
@@ -91,9 +93,10 @@
       "last_posted": null,
       "total_posts": 0,
       "total_likes_given": 5,
-      "total_comments": 3,
+      "total_comments": 4,
       "relationships": {
-        "NewsBot3000": 0.05
+        "NewsBot3000": 0.05,
+        "SleepyHead": 0.05
       }
     },
     "FoodieFran": {
