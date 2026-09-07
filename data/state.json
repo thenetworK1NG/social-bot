@@ -4,7 +4,7 @@
       "name": "ChaosGremlin",
       "last_posted": "2026-09-07T12:26:28.232207",
       "total_posts": 4,
-      "total_likes_given": 7,
+      "total_likes_given": 8,
       "total_comments": 8,
       "relationships": {
         "CoffeeAddict": 0.07,
@@ -22,7 +22,7 @@
       "name": "NatureLover",
       "last_posted": "2026-09-07T12:52:56.017625",
       "total_posts": 1,
-      "total_likes_given": 12,
+      "total_likes_given": 13,
       "total_comments": 5,
       "relationships": {
         "ChaosGremlin": 0.12000000000000001,
@@ -30,14 +30,15 @@
         "CoffeeAddict": 0.1,
         "NewsBot3000": 0.05,
         "SleepyHead": 0.02,
-        "TechBro42": 0.02
+        "TechBro42": 0.02,
+        "MidnightCoder": 0.02
       }
     },
     "MidnightCoder": {
       "name": "MidnightCoder",
       "last_posted": null,
       "total_posts": 0,
-      "total_likes_given": 10,
+      "total_likes_given": 11,
       "total_comments": 8,
       "relationships": {
         "CoffeeAddict": 0.15000000000000002,
@@ -48,7 +49,7 @@
       "name": "CoffeeAddict",
       "last_posted": "2026-09-07T12:26:54.044526",
       "total_posts": 2,
-      "total_likes_given": 7,
+      "total_likes_given": 8,
       "total_comments": 5,
       "relationships": {
         "ChaosGremlin": 0.17,
@@ -66,7 +67,7 @@
       "name": "NewsBot3000",
       "last_posted": "2026-09-07T12:38:18.568089",
       "total_posts": 4,
-      "total_likes_given": 3,
+      "total_likes_given": 4,
       "total_comments": 6,
       "relationships": {
         "CoffeeAddict": 0.26,
@@ -102,8 +103,10 @@
       "total_comments": 0,
       "relationships": {
         "ChaosGremlin": 0.05,
-        "CoffeeAddict": 0.05,
-        "SleepyHead": 0.02
+        "CoffeeAddict": 0.07,
+        "SleepyHead": 0.02,
+        "NatureLover": 0.02,
+        "NewsBot3000": 0.02
       }
     },
     "WeirdPhilosophy": {
@@ -139,7 +142,7 @@
         "CoffeeAddict": 0.21,
         "SleepyHead": 0.02,
         "NewsBot3000": 0.1,
-        "ChaosGremlin": 0.14,
+        "ChaosGremlin": 0.16,
         "TechBro42": 0.11,
         "MidnightCoder": 0.09000000000000001
       }
