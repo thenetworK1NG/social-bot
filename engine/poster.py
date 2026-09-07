@@ -40,55 +40,44 @@ def build_post_prompt(bot, post_type, recent_posts, now_str):
     if post_type == "reply":
         target = random.choice([p for p in recent_posts if p.author != bot.name])
         return (
-            f"You are {bot.name}, a user on a social media platform. "
-            f"Bio: {bot.bio}. Personality: {bot.personality_prompt}. "
-            f"Interests: {', '.join(bot.interests)}. "
+            f"{bot.name} is a user whose bio is: {bot.bio}. Personality: {bot.personality_prompt}. "
             f"Current time: {now_str}. "
-            f"Someone you follow named {target.author} posted: \"{target.content}\" "
-            f"Write a natural short reply/quote-post to this. 1-2 sentences. "
-            f"Be casual, authentic, respond to what they said. "
-            f"{'You love using emojis.' if bot.uses_emojis else 'Do not use emojis.'} "
-            f"Output ONLY the raw post text with zero preamble, no quotes, no labels, no explanation."
+            f"A friend named {target.author} posted: \"{target.content}\". "
+            f"Make a casual short reply to what they said, in your own voice (1 sentence). "
+            f"Do not quote or repeat their post. Say something that continues the conversation."
+            f"{' Emojis welcome.' if bot.uses_emojis else ' No emojis.'}"
         )
     if post_type == "question":
         return (
-            f"You are {bot.name}, a user on a social media platform. "
-            f"Bio: {bot.bio}. Personality: {bot.personality_prompt}. "
+            f"{bot.name} is a user whose bio is: {bot.bio}. Personality: {bot.personality_prompt}. "
             f"Current time: {now_str}. "
             f"Ask your followers a genuine casual question ({random.choice(drama_topics)} related or daily life). "
-            f"1-2 sentences, sounds like a real person reaching out. "
-            f"{'You love using emojis.' if bot.uses_emojis else 'Do not use emojis.'} "
-            f"Output ONLY the raw post text with zero preamble, no quotes, no labels, no explanation."
+            f"One sentence, sounds like a real person reaching out."
+            f"{' Emojis welcome.' if bot.uses_emojis else ' No emojis.'}"
         )
     if post_type == "followup":
         own = [p for p in recent_posts if p.author == bot.name][0]
         return (
-            f"You are {bot.name}, a user on a social media platform. "
-            f"Personality: {bot.personality_prompt}. Current time: {now_str}. "
+            f"{bot.name} has personality: {bot.personality_prompt}. Current time: {now_str}. "
             f"Your earlier post \"{own.content}\" got a lot of engagement. "
-            f"Write a short follow-up post acknowledging the response casually (1-2 sentences). "
-            f"{'You love using emojis.' if bot.uses_emojis else 'Do not use emojis.'} "
-            f"Output ONLY the raw post text with zero preamble, no quotes, no labels, no explanation."
+            f"Make a short follow-up comment about the response, casually, in your own voice (1 sentence)."
+            f"{' Emojis welcome.' if bot.uses_emojis else ' No emojis.'}"
         )
     if post_type == "joke_reference":
         joke = random.choice(dynamics.get_running_jokes())
         return (
-            f"You are {bot.name}, a user on a social media platform. "
-            f"Personality: {bot.personality_prompt}. Current time: {now_str}. "
+            f"{bot.name} has personality: {bot.personality_prompt}. Current time: {now_str}. "
             f"There's an inside joke on this platform: {joke}. "
-            f"Make a short casual post referencing it (1-2 sentences). "
-            f"{'You love using emojis.' if bot.uses_emojis else 'Do not use emojis.'} "
-            f"Output ONLY the raw post text with zero preamble, no quotes, no labels, no explanation."
+            f"Make a short casual post referencing it (1 sentence)."
+            f"{' Emojis welcome.' if bot.uses_emojis else ' No emojis.'}"
         )
     topic = random.choice(bot.interests + TOPICS)
     return (
-        f"You are {bot.name}, a user on a social media platform. "
-        f"Bio: {bot.bio}. Personality: {bot.personality_prompt}. "
-        f"Interests: {', '.join(bot.interests)}. Current time: {now_str}. "
-        f"Write a single natural social media post about {topic}. 1-3 sentences. "
-        f"Be casual, authentic, sometimes imperfect (a rare typo is fine). "
-        f"Do NOT use hashtags. {'' if bot.uses_emojis else 'Do not use emojis.'} "
-        f"Output ONLY the raw post text with zero preamble, no quotes, no labels, no explanation."
+        f"{bot.name} is a user whose bio is: {bot.bio}. Personality: {bot.personality_prompt}. "
+        f"Current time: {now_str}. "
+        f"Write a single natural social media post about {topic} (1-2 sentences). "
+        f"Casual, authentic, sometimes imperfect — like a real person typing. No hashtags."
+        f"{' Emojis welcome.' if bot.uses_emojis else ' No emojis.'}"
     )
 
 

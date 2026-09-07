@@ -2,7 +2,7 @@ import random
 from datetime import datetime
 
 from config import BOTS
-from engine.llm import generate_text
+from engine.llm import generate_text, generate_json
 from social import feed
 from social import dynamics
 from social.models import Comment
@@ -49,31 +49,60 @@ def decide_engagement(post, bot_list):
     return actions[:max_engagers]
 
 
-def build_comment_prompt(bot, post, surrounding_comments):
-    ctx = ""
-    if surrounding_comments:
-        others = "; ".join(f"{c.author}: {c.content}" for c in surrounding_comments)
-        ctx = f"Existing comments on this post: {others}\n"
+def _build_batch_prompt(slots):
+    """One prompt that asks the model for all comment texts in a single call."""
+    parts = []
+    for i, (bot, post, ctx) in enumerate(slots):
+        context = ""
+        if ctx:
+            context = " Existing comments: " + "; ".join(
+                f"{c.author}: {c.content[:80]}" for c in ctx[:3]
+            ) + "."
+        emoji = " Emojis are welcome (keep it casual)." if bot.uses_emojis else " No emojis."
+        parts.append(
+            f"[{i}] Bot: {bot.name} — personality: {bot.personality_prompt}."
+            f" A friend named {post.author} posted: \"{post.content}\".{context}"
+            f" They react casually, in their own voice, one sentence. Do not quote"
+            f" or repeat the post back.{emoji}"
+        )
     return (
-        f"You are {bot.name}, a user on a social media platform. "
-        f"Bio: {bot.bio}. Personality: {bot.personality_prompt}. "
-        f"{bot.name} posted previously: \"{post.author}\" wrote: \"{post.content}\".\n"
-        f"{ctx}"
-        f"Write a short natural comment replying to {post.author}'s post. 1-2 sentences. "
-        f"Be casual, react to what they actually said, stay in character. "
-        f"{'You love using emojis.' if bot.uses_emojis else 'Do not use emojis.'} "
-        f"Do NOT use hashtags. Output ONLY the raw comment text with zero preamble, no quotes, no labels, no explanation."
+        "You are writing comments for several fictional social media users,"
+        " each reacting to a friend. Sound like real people, not an AI.\n"
+        + "\n".join(parts)
+        + "\nReturn a JSON array with EXACTLY the same number of string entries,"
+          " in the same order — one comment per user."
     )
 
 
+def generate_comment_batch(slots):
+    """Generate all comment texts in one LLM call. Returns list aligned to slots or None."""
+    data = generate_json(_build_batch_prompt(slots), timeout=240)
+    if isinstance(data, list) and len(data) == len(slots):
+        return [t.strip() if isinstance(t, str) else "" for t in data]
+    # Tolerate a JSON object keyed by index
+    if isinstance(data, dict):
+        out = [""] * len(slots)
+        for k, v in data.items():
+            try:
+                out[int(k)] = v
+            except (ValueError, TypeError, IndexError):
+                continue
+        if all(isinstance(s, str) for s in out):
+            return [s.strip() for s in out]
+    return None
+
+
 def engage_with_feed():
-    """Process engagement on recent posts."""
+    """Process engagement on recent posts. Comments are generated in one batch."""
     now = datetime.now()
     posts = feed.get_recent_posts(6)
     if not posts:
         return 0
 
+    comment_slots = []          # (bot, post, surrounding_comments)
+    changed_posts = set()
     engagement_count = 0
+
     for post in posts:
         if random.random() > 0.7:
             continue
@@ -96,25 +125,34 @@ def engage_with_feed():
                 change = True
 
             if should_comment:
-                surrounding = [c for c in post.comments[:3]]
-                prompt = build_comment_prompt(bp, post, surrounding)
-                content = generate_text(prompt)
-                if not content:
-                    content = _fallback_comment(bp, post)
-                comment = Comment(
-                    author=bp.name,
-                    content=content,
-                    timestamp=now.isoformat(),
+                comment_slots.append(
+                    (bp, post, [c for c in post.comments[:3]])
                 )
-                post.comments.append(comment)
-                dynamics.bump_relationship(bp.name, post.author, 0.05)
-                bs.total_comments += 1
-                engagement_count += 1
                 change = True
 
             feed.update_bot_state(bs)
 
         if change:
+            changed_posts.add(post.id)
+
+    # One LLM call for all the comment texts, then attach them.
+    texts = generate_comment_batch(comment_slots) if comment_slots else None
+    for idx, (bp, post, _) in enumerate(comment_slots):
+        content = (texts[idx] if texts and texts[idx] else "") or _fallback_comment(bp, post)
+        post.comments.append(Comment(
+            author=bp.name,
+            content=content,
+            timestamp=now.isoformat(),
+        ))
+        dynamics.bump_relationship(bp.name, post.author, 0.05)
+        bs = feed.get_bot_state(bp.name)
+        bs.total_comments += 1
+        feed.update_bot_state(bs)
+        engagement_count += 1
+        changed_posts.add(post.id)
+
+    for post in posts:
+        if post.id in changed_posts:
             feed.update_post(post)
 
     # Occasionally add reply threads to the most recent comment
@@ -139,12 +177,10 @@ def _maybe_extend_thread(post):
         return
     replier = random.choice(candidates)
     prompt = (
-        f"You are {replier.name}, a user on a social media platform. "
-        f"Personality: {replier.personality_prompt}. "
+        f"{replier.name} is a user with this personality: {replier.personality_prompt}. "
         f"{comment.author} commented \"{comment.content}\" on a post by {post.author}. "
-        f"Write a short natural reply to {comment.author}'s comment. 1 sentence. "
-        f"Stay in character. {'' if replier.uses_emojis else 'Do not use emojis.'} "
-        f"Output ONLY the raw reply text with zero preamble, no quotes, no labels, no explanation."
+        f"Reply to {comment.author}'s comment the way a real friend would — one sentence,"
+        f" in your own voice, do not quote it back. {'Emojis welcome.' if replier.uses_emojis else 'No emojis.'}"
     )
     reply_content = generate_text(prompt)
     if not reply_content:

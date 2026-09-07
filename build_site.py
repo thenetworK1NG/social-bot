@@ -188,6 +188,8 @@ def render_post(post):
     likes = post.get("likes", [])
     comments = post.get("comments", [])
     post_type = post.get("post_type", "normal")
+    pid = post.get("id", "") or ""
+    post_anchor = f' id="post-{pid}"' if pid else ""
 
     dot_color = "var(--blue)"
     badge = ""
@@ -213,17 +215,20 @@ def render_post(post):
         )
 
     comment_html = ""
-    for c in comments:
+    for ci, c in enumerate(comments):
         c_author = c.get("author", "?")
         c_content = _esc(clean_content(c.get("content", "")))
         c_ts = c.get("timestamp", "")
+        c_id = c.get("id", "") or f"c{ci}"
+        c_anchor = f' id="{pid}-{c_id}"'
         reply_html = ""
-        for r in c.get("replies", []):
+        for ri, r in enumerate(c.get("replies", [])):
             r_author = r.get("author", "?")
             r_content = _esc(clean_content(r.get("content", "")))
             r_ts = r.get("timestamp", "")
+            r_anchor = f' id="{pid}-{c_id}-r{ri}"'
             reply_html += (
-                f'<div class="c nested">'
+                f'<div class="c nested"{r_anchor}>'
                 f'<div class="c-body">'
                 f'<span class="c-new-group">'
                 f'{avatar_block(r_author, "xs")}'
@@ -236,7 +241,7 @@ def render_post(post):
                 f'</div></div>'
             )
         comment_html += (
-            f'<div class="c">'
+            f'<div class="c"{c_anchor}>'
             f'<div class="c-av">{avatar_block(c_author, "xs")}</div>'
             f'<div class="c-body">'
             f'<span class="c-new-group">'
@@ -265,7 +270,7 @@ def render_post(post):
     react_bar = render_react_bar(post)
 
     return f"""
-    <article class="post">
+    <article class="post"{post_anchor}>
       <div class="post-top">
         {avatar_block(author, "md")}
         <div class="post-head">
@@ -360,20 +365,23 @@ def render_hot(feed):
 def render_notifs(feed):
     items = []
     for p in feed:
+        pid = p.get("id", "") or ""
         author = p.get("author", "?")
         for l in p.get("likes", []):
-            items.append((p.get("timestamp", ""), "like", l, author, ""))
+            items.append((p.get("timestamp", ""), "like", l, author, "", f"#post-{pid}"))
         for c in p.get("comments", []):
-            items.append((c.get("timestamp", ""), "com", c.get("author", "?"), author, c.get("content", "")))
-            for r in c.get("replies", []):
-                items.append((r.get("timestamp", ""), "rep", r.get("author", "?"), author, r.get("content", "")))
+            cid = c.get("id", "") or ""
+            anchor = f"#post-{pid}-{cid}"
+            items.append((c.get("timestamp", ""), "com", c.get("author", "?"), author, c.get("content", ""), anchor))
+            for ri, r in enumerate(c.get("replies", [])):
+                items.append((r.get("timestamp", ""), "rep", r.get("author", "?"), author, r.get("content", ""), f"{anchor}-r{ri}"))
     items.sort(key=lambda x: x[0], reverse=True)
     if not items:
         return '<div class="empty sm">no activity yet…</div>'
     icons = {"like": "❤", "com": "💬", "rep": "↩"}
     colors = {"like": "background:#1d9bf033", "com": "background:#2ecc7133", "rep": "background:#9b59b633"}
     rows = []
-    for ts, kind, who, target, text in items[:14]:
+    for ts, kind, who, target, text, anchor in items[:14]:
         if kind == "like":
             line = f'<b>{_esc(who)}</b> liked {target}\'s post'
         elif kind == "com":
@@ -384,11 +392,11 @@ def render_notifs(feed):
         if snippet:
             line += f' <span class="notif-msg">"{snippet}"</span>'
         rows.append(
-            f'<div class="notif">'
+            f'<a class="notif" href="{anchor}">'
             f'<span class="ico" style="{colors[kind]}">{icons[kind]}</span>'
             f'<span class="notif-text">{line}</span>'
             f'<span class="notif-time">{time_ago(ts)}</span>'
-            f'</div>'
+            f'</a>'
         )
     return "\n".join(rows)
 
@@ -604,6 +612,8 @@ HTML_TEMPLATE = """<!DOCTYPE html>
   .hot-msg{font-size:13px;color:var(--muted);margin-top:3px;line-height:1.45;word-break:break-word;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
   .notif{display:flex;gap:10px;align-items:flex-start;padding:12px 16px;border-top:1px solid var(--border)}
   .notif:first-of-type{border-top:none}
+  a.notif{color:inherit;text-decoration:none}
+  a.notif:active,.notif:hover{background:var(--panel)}
   .notif .ico{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
   .notif-text{font-size:13px;line-height:1.45;flex:1;min-width:0;color:var(--text)}
   .notif-text b{font-weight:700}
@@ -618,6 +628,10 @@ HTML_TEMPLATE = """<!DOCTYPE html>
   .empty{font-size:15px;color:var(--muted);text-align:center;padding:30px}
   .empty.sm{padding:14px;font-size:13px}
   svg{display:inline-block}
+  /* jump-to-comment */
+  .post,.c{scroll-margin-top:62px}
+  .flash{animation:flasher 1.8s ease}
+  @keyframes flasher{0%{background:var(--panel2);box-shadow:inset 3px 0 0 var(--blue)}100%{background:transparent;box-shadow:inset 0 0 0 transparent}}
 </style>
 </head>
 <body>
@@ -745,6 +759,31 @@ HTML_TEMPLATE = """<!DOCTYPE html>
   items.forEach(function(btn){
     btn.addEventListener('click', function(){ switchTo(btn); });
   });
+
+  // Tap in Alerts -> open the post, reveal the thread, scroll + flash the target.
+  function jumpToAnchor(){
+    var hash = location.hash;
+    if (!hash || hash.length < 2) return;
+    var el;
+    try { el = document.querySelector(hash); } catch (e) { return; }
+    if (!el) return;
+    var homeBtn = document.querySelector('.bn-item[data-view="home"]');
+    if (homeBtn && !document.querySelector('.screen[data-view="home"]').classList.contains('active')) {
+      switchTo(homeBtn);
+    }
+    var node = el;
+    while (node && node.parentElement) {
+      node = node.parentElement;
+      if (node.tagName === 'DETAILS' && !node.open) node.open = true;
+    }
+    el.classList.add('flash');
+    setTimeout(function(){
+      el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }, 80);
+    setTimeout(function(){ el.classList.remove('flash'); }, 2200);
+  }
+  window.addEventListener('load', jumpToAnchor);
+  window.addEventListener('hashchange', jumpToAnchor);
 }());
 </script>
 </body>
