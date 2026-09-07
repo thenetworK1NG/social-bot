@@ -3,6 +3,10 @@ import os
 from typing import List
 
 from social.models import Post, BotState
+try:
+    from engine import firebase
+except Exception:  # pragma: no cover - firebase optional at import time
+    firebase = None
 
 DATA_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data")
 FEED_PATH = os.path.join(DATA_DIR, "feed.json")
@@ -33,6 +37,11 @@ def load_feed() -> List[Post]:
 
 def save_feed(posts: List[Post]):
     _write_json(FEED_PATH, [p.to_dict() for p in posts])
+    if firebase:
+        try:
+            firebase.sync_feed([p.to_dict() for p in posts])
+        except Exception:
+            pass
 
 
 def load_state() -> dict:
@@ -46,6 +55,15 @@ def load_state() -> dict:
 
 def save_state(state: dict):
     _write_json(STATE_PATH, state)
+    if firebase:
+        try:
+            bots = state.get("bots", {})
+            if isinstance(bots, list):
+                bots = {b.get("name", str(i)): b for i, b in enumerate(bots)}
+            if bots:
+                firebase.sync_bots(bots)
+        except Exception:
+            pass
 
 
 def add_post(post: Post):

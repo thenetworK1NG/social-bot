@@ -31,6 +31,13 @@ def reset_data():
     with open(STATE_PATH, "w", encoding="utf-8") as f:
         json.dump({}, f)
     print(f"[{datetime.now():%H:%M:%S}] Data cleared  (feed.json=[], state.json={{}})")
+    try:
+        from engine import firebase
+        firebase.sync_feed([])
+        firebase.sync_bots({})
+        print(f"[{datetime.now():%H:%M:%S}] Firebase cleared")
+    except Exception as e:
+        print(f"[{datetime.now():%H:%M:%S}] Firebase clear skipped ({e})")
 
 
 def rebuild_site():
