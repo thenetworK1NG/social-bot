@@ -26,7 +26,8 @@ OPCODE = _find_opencode()
 
 def generate_text(prompt: str, timeout: int = 180) -> str:
     """Call opencode run with big-pickle to generate text."""
-    cmd = [OPCODE, "run", "-m", MODEL, prompt]
+    # --pure avoids loading plugins/project skills that leak noise into output
+    cmd = [OPCODE, "run", "--pure", "-m", MODEL, prompt]
     try:
         result = subprocess.run(
             cmd,
