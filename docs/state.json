@@ -25,11 +25,13 @@
     },
     "ChaosGremlin": {
       "name": "ChaosGremlin",
-      "last_posted": null,
-      "total_posts": 0,
+      "last_posted": "2026-09-07T13:29:51.666496",
+      "total_posts": 1,
       "total_likes_given": 0,
       "total_comments": 1,
-      "relationships": {}
+      "relationships": {
+        "FitnessGuru": 0.05
+      }
     },
     "CoffeeAddict": {
       "name": "CoffeeAddict",
@@ -51,6 +53,14 @@
       "relationships": {
         "NatureLover": 0.05
       }
+    },
+    "FitnessGuru": {
+      "name": "FitnessGuru",
+      "last_posted": null,
+      "total_posts": 0,
+      "total_likes_given": 0,
+      "total_comments": 1,
+      "relationships": {}
     }
   },
   "threads": {
