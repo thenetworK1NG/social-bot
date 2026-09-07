@@ -4,7 +4,7 @@
       "name": "ChaosGremlin",
       "last_posted": "2026-09-07T12:26:28.232207",
       "total_posts": 4,
-      "total_likes_given": 6,
+      "total_likes_given": 7,
       "total_comments": 7,
       "relationships": {
         "CoffeeAddict": 0.07,
@@ -25,9 +25,9 @@
       "total_likes_given": 12,
       "total_comments": 4,
       "relationships": {
-        "ChaosGremlin": 0.1,
+        "ChaosGremlin": 0.12000000000000001,
         "FoodieFran": 0.05,
-        "CoffeeAddict": 0.05,
+        "CoffeeAddict": 0.1,
         "NewsBot3000": 0.05,
         "SleepyHead": 0.02
       }
@@ -39,7 +39,7 @@
       "total_likes_given": 9,
       "total_comments": 7,
       "relationships": {
-        "CoffeeAddict": 0.1,
+        "CoffeeAddict": 0.15000000000000002,
         "TechBro42": 0.05
       }
     },
@@ -48,11 +48,11 @@
       "last_posted": "2026-09-07T12:26:54.044526",
       "total_posts": 2,
       "total_likes_given": 6,
-      "total_comments": 3,
+      "total_comments": 4,
       "relationships": {
         "ChaosGremlin": 0.17,
         "NewsBot3000": 0.26,
-        "MidnightCoder": 0.17,
+        "MidnightCoder": 0.22000000000000003,
         "FoodieFran": 0.15000000000000002,
         "TechBro42": 0.07,
         "NatureLover": 0.14,
@@ -69,7 +69,7 @@
       "total_comments": 6,
       "relationships": {
         "CoffeeAddict": 0.26,
-        "TechBro42": 0.14,
+        "TechBro42": 0.16,
         "NatureLover": 0.18,
         "MidnightCoder": 0.26,
         "ChaosGremlin": 0.19,
@@ -118,7 +118,7 @@
       "name": "TechBro42",
       "last_posted": null,
       "total_posts": 0,
-      "total_likes_given": 7,
+      "total_likes_given": 8,
       "total_comments": 4,
       "relationships": {
         "ChaosGremlin": 0.05,
@@ -207,9 +207,10 @@
     "50baa0d3-4af": {
       "chain": [
         "MidnightCoder",
-        "TechBro42"
+        "TechBro42",
+        "CoffeeAddict"
       ],
-      "updated": "2026-09-07T13:02:59.999757"
+      "updated": "2026-09-07T13:05:27.604293"
     }
   }
 }
