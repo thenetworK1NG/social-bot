@@ -63,7 +63,10 @@ class ActivityLoop:
 
     def __init__(self):
         self.scheduler = SmartScheduler()
-        self.next_post_at = datetime.now() + timedelta(seconds=self._next_post_delay())
+        self.next_post_delay = self._next_post_delay()
+        self.next_post_at = datetime.now() + timedelta(seconds=self.next_post_delay)
+        self.next_engage_delay = self._engagement_delay()
+        self.next_engage_at = datetime.now() + timedelta(seconds=self.next_engage_delay)
         self.last_engage = datetime.now()
         self.posts_since_push = 0
         self.total_engagements = 0
@@ -78,21 +81,32 @@ class ActivityLoop:
     def _should_post(self):
         return datetime.now() >= self.next_post_at
 
+    def _should_engage(self):
+        return datetime.now() >= self.next_engage_at
+
     def _engage(self):
         """One background engagement pass. Returns how many interactions happened."""
         count = engage_with_feed()
-        if count:
-            self.total_engagements += count
-            log(f"  background engagement: {count} new like(s)/comment(s)")
+        self.total_engagements += count
+        self.next_engage_delay = self._engagement_delay()
+        self.next_engage_at = datetime.now() + timedelta(seconds=self.next_engage_delay)
         return count
 
     def _mini_post(self):
         """Occasionally post a casual mini update during long waits."""
-        # Only if we've been waiting a while and engagement is flowing
         if random.random() < 0.35:
             post = create_post()
             self.posts_since_push += 1
-            log(f"  mini post by {post.author}: {post.content[:70]}")
+            return post
+        return None
+
+    def _status(self):
+        """One-line status for the next scheduled events."""
+        nxt = self.next_post_at - datetime.now()
+        nxt_s = max(0, int(nxt.total_seconds()))
+        nxt_m = nxt_s // 60
+        nxt_sec = nxt_s % 60
+        return f"next post: {nxt_m}m{0 if nxt_sec<10 else ''}{nxt_sec}s | posts: {self.posts_since_push} | engagements: {self.total_engagements}"
 
     def run_step(self):
         now = datetime.now()
@@ -100,28 +114,36 @@ class ActivityLoop:
         # If it's time for the main scheduled post, do it.
         if self._should_post():
             self._main_post()
-            self.next_post_at = datetime.now() + timedelta(seconds=self._next_post_delay())
-            # Reset so background activity ramps up again
+            self.next_post_delay = self._next_post_delay()
+            self.next_post_at = datetime.now() + timedelta(seconds=self.next_post_delay)
             self.last_engage = now
+            self.next_engage_delay = self._engagement_delay()
+            self.next_engage_at = now + timedelta(seconds=self.next_engage_delay)
             return
 
         # Otherwise keep the network alive with background activity while waiting.
-        if now - self.last_engage >= timedelta(seconds=self._engagement_delay()):
+        if self._should_engage():
             self.last_engage = now
-            self._engage()
-            # Occasionally drop a mini post during long waits
-            self._mini_post()
+            count = self._engage()
+            if count:
+                log(f"  engagement pass: {count} new like(s)/comment(s)")
+            else:
+                log("  engagement pass: nothing new")
+            mini = self._mini_post()
+            if mini:
+                log(f"  mini post by {mini.author}: {mini.content[:70]}")
+            log(f"  {self._status()}")
 
     def _main_post(self):
-        log("-- new main post --")
         post = create_post()
         self.posts_since_push += 1
-        log(f"  posted by {post.author}: {post.content[:80]}")
-        # A burst of engagement right after so new posts get early reactions
+        log(f"-- new main post by {post.author} [{post.post_type}] --")
+        log(f"  content: {post.content[:90]}")
         count = engage_with_feed()
+        self.total_engagements += count
         if count:
-            self.total_engagements += count
             log(f"  early reactions: {count}")
+        log(f"  {self._status()}")
 
 
 def main():
@@ -131,10 +153,11 @@ def main():
     log(f"Active bots: {', '.join(b.name for b in BOTS)}")
 
     loop = ActivityLoop()
+    log(f"Schedule: next post in ~{loop.next_post_delay//60}m{loop.next_post_delay%60:02d}s | "
+        f"engagement every ~{loop.next_engage_delay//60}m{loop.next_engage_delay%60:02d}s")
     try:
         while True:
             loop.run_step()
-            # Small tick so the loop checks frequently without busy-spinning.
             time.sleep(5)
     except KeyboardInterrupt:
         log("Shutting down, saving state...")

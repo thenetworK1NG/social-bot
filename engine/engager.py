@@ -7,6 +7,12 @@ from social import feed
 from social import dynamics
 from social.models import Comment
 from engine.scheduler import is_bot_active
+from datetime import datetime
+
+
+def _elog(msg):
+    ts = datetime.now().strftime("%H:%M:%S")
+    print(f"[{ts}]  {msg}", flush=True)
 
 
 def _like_rate_drift(bs):
@@ -109,12 +115,14 @@ def engage_with_feed():
     now = datetime.now()
     posts = feed.get_recent_posts(6)
     if not posts:
+        _elog("no posts to engage with")
         return 0
 
     comment_slots = []          # (bot, post, surrounding_comments)
     changed_posts = set()
     engagement_count = 0
 
+    _elog(f"scanning {len(posts)} post(s) for engagement")
     for post in posts:
         if random.random() > 0.7:
             continue
@@ -135,6 +143,7 @@ def engage_with_feed():
                 bs.total_likes_given += 1
                 dynamics.bump_relationship(bp.name, post.author, 0.02)
                 change = True
+                _elog(f"{bp.name} liked {post.author}'s post")
 
             if should_comment:
                 comment_slots.append(
@@ -162,6 +171,7 @@ def engage_with_feed():
         feed.update_bot_state(bs)
         engagement_count += 1
         changed_posts.add(post.id)
+        _elog(f"{bp.name} commented on {post.author}'s post: \"{content[:65]}\"")
 
     for post in posts:
         if post.id in changed_posts:
@@ -170,6 +180,7 @@ def engage_with_feed():
     # Occasionally add reply threads to the most recent comment
     if posts and random.random() < 0.4:
         _maybe_extend_thread(posts[0])
+        engagement_count += 1
 
     return engagement_count
 
