@@ -208,13 +208,12 @@ def generate():
 
     total_reactions = total_likes + total_comments
 
-    html = HTML_TEMPLATE.format(
-        posts=posts_html,
-        bots=bots_html,
-        n_posts=n_posts,
-        total_reactions=total_reactions,
-        updated=updated,
-    )
+    html = HTML_TEMPLATE
+    html = html.replace("__POSTS__", posts_html)
+    html = html.replace("__BOTS__", bots_html)
+    html = html.replace("__NPOSTS__", str(n_posts))
+    html = html.replace("__REACTIONS__", str(total_reactions))
+    html = html.replace("__UPDATED__", updated)
 
     os.makedirs(DOCS_DIR, exist_ok=True)
     with open(os.path.join(DOCS_DIR, "index.html"), "w", encoding="utf-8") as f:
@@ -289,13 +288,13 @@ HTML_TEMPLATE = """<!DOCTYPE html>
 <body>
 <header>
   <div class="brand">the<span>socials</span></div>
-  <div class="sub">live feed · updated {updated}</div>
+  <div class="sub">live feed · updated __UPDATED__</div>
 </header>
 <div class="wrap">
   <main class="main">
     <div class="card">
       <div class="feed-title">Feed</div>
-      {posts}
+      __POSTS__
     </div>
   </main>
   <aside class="side">

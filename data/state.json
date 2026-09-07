@@ -38,7 +38,8 @@
       "relationships": {
         "ChaosGremlin": 0.05,
         "NewsBot3000": 0.07,
-        "MidnightCoder": 0.1
+        "MidnightCoder": 0.1,
+        "FoodieFran": 0.05
       }
     },
     "": {
@@ -46,7 +47,7 @@
       "last_posted": null,
       "total_posts": 0,
       "total_likes_given": 0,
-      "total_comments": 0,
+      "total_comments": 1,
       "relationships": {
         "ChaosGremlin": 0.05,
         "NewsBot3000": 0.07,
@@ -72,7 +73,7 @@
       "name": "SleepyHead",
       "last_posted": null,
       "total_posts": 0,
-      "total_likes_given": 1,
+      "total_likes_given": 2,
       "total_comments": 0,
       "relationships": {}
     },
@@ -110,7 +111,9 @@
     },
     "FoodieFran": {
       "relationships": {
-        "NatureLover": 0.05
+        "NatureLover": 0.05,
+        "CoffeeAddict": 0.05,
+        "SleepyHead": 0.02
       }
     }
   },
