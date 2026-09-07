@@ -36,7 +36,7 @@
       "total_comments": 2,
       "relationships": {
         "FitnessGuru": 0.09000000000000001,
-        "CoffeeAddict": 0.11,
+        "CoffeeAddict": 0.16,
         "SleepyHead": 0.08,
         "TechBro42": 0.04,
         "NatureLover": 0.13,
@@ -51,14 +51,15 @@
       "last_posted": "2026-09-07T13:53:57.112520",
       "total_posts": 1,
       "total_likes_given": 6,
-      "total_comments": 4,
+      "total_comments": 5,
       "relationships": {
         "VibeChecker": 0.05,
         "NatureLover": 0.05,
         "NewsBot3000": 0.05,
         "SleepyHead": 0.04,
         "MidnightCoder": 0.02,
-        "FoodieFran": 0.05
+        "FoodieFran": 0.05,
+        "ChaosGremlin": 0.05
       }
     },
     "SleepyHead": {
