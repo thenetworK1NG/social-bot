@@ -4,7 +4,7 @@
       "name": "ChaosGremlin",
       "last_posted": "2026-09-07T12:26:28.232207",
       "total_posts": 4,
-      "total_likes_given": 3,
+      "total_likes_given": 4,
       "total_comments": 5,
       "relationships": {
         "CoffeeAddict": 0.07,
@@ -23,7 +23,7 @@
       "last_posted": null,
       "total_posts": 0,
       "total_likes_given": 9,
-      "total_comments": 3,
+      "total_comments": 4,
       "relationships": {
         "ChaosGremlin": 0.05,
         "FoodieFran": 0.05
@@ -61,13 +61,13 @@
       "last_posted": "2026-09-07T12:38:18.568089",
       "total_posts": 4,
       "total_likes_given": 3,
-      "total_comments": 3,
+      "total_comments": 4,
       "relationships": {
         "CoffeeAddict": 0.26,
         "TechBro42": 0.14,
-        "NatureLover": 0.11,
+        "NatureLover": 0.16,
         "MidnightCoder": 0.16,
-        "ChaosGremlin": 0.17,
+        "ChaosGremlin": 0.19,
         "FitnessGuru": 0.02,
         "SleepyHead": 0.16
       }
@@ -143,7 +143,8 @@
       "relationships": {
         "TechBro42": 0.02,
         "NatureLover": 0.02,
-        "CoffeeAddict": 0.05
+        "CoffeeAddict": 0.05,
+        "NewsBot3000": 0.05
       }
     }
   },
