@@ -20,7 +20,7 @@
       "name": "NatureLover",
       "last_posted": null,
       "total_posts": 0,
-      "total_likes_given": 1,
+      "total_likes_given": 2,
       "total_comments": 1,
       "relationships": {
         "WeirdPhilosophy": 0.05
@@ -35,7 +35,9 @@
       "relationships": {
         "FitnessGuru": 0.07,
         "CoffeeAddict": 0.02,
-        "SleepyHead": 0.02
+        "SleepyHead": 0.02,
+        "TechBro42": 0.02,
+        "NatureLover": 0.02
       }
     },
     "CoffeeAddict": {
@@ -73,7 +75,7 @@
       "name": "TechBro42",
       "last_posted": null,
       "total_posts": 0,
-      "total_likes_given": 0,
+      "total_likes_given": 1,
       "total_comments": 1,
       "relationships": {}
     },
