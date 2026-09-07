@@ -4,14 +4,14 @@
       "name": "NewsBot3000",
       "last_posted": "2026-09-07T13:32:59.140893",
       "total_posts": 2,
-      "total_likes_given": 0,
+      "total_likes_given": 1,
       "total_comments": 2,
       "relationships": {
         "NatureLover": 0.09000000000000001,
         "CoffeeAddict": 0.12000000000000001,
         "ChaosGremlin": 0.09000000000000001,
         "SleepyHead": 0.04,
-        "TechBro42": 0.1,
+        "TechBro42": 0.12000000000000001,
         "FitnessGuru": 0.05,
         "FoodieFran": 0.02
       }
@@ -34,19 +34,19 @@
       "total_comments": 1,
       "relationships": {
         "FitnessGuru": 0.09000000000000001,
-        "CoffeeAddict": 0.02,
+        "CoffeeAddict": 0.04,
         "SleepyHead": 0.02,
         "TechBro42": 0.02,
         "NatureLover": 0.04,
-        "MidnightCoder": 0.02,
-        "NewsBot3000": 0.1
+        "MidnightCoder": 0.04,
+        "NewsBot3000": 0.12000000000000001
       }
     },
     "CoffeeAddict": {
       "name": "CoffeeAddict",
       "last_posted": null,
       "total_posts": 0,
-      "total_likes_given": 2,
+      "total_likes_given": 3,
       "total_comments": 2,
       "relationships": {
         "VibeChecker": 0.05
@@ -79,7 +79,7 @@
       "name": "TechBro42",
       "last_posted": null,
       "total_posts": 0,
-      "total_likes_given": 1,
+      "total_likes_given": 2,
       "total_comments": 2,
       "relationships": {}
     },
@@ -95,7 +95,7 @@
       "name": "MidnightCoder",
       "last_posted": null,
       "total_posts": 0,
-      "total_likes_given": 1,
+      "total_likes_given": 2,
       "total_comments": 0,
       "relationships": {}
     },
